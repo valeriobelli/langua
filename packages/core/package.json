@@ -1,0 +1,43 @@
+{
+  "name": "@langua/core",
+  "version": "1.0.0",
+  "description": "The dependency-free framework-agnostic type-safe core package of Langua.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/valeriobelli/langua/packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/valeriobelli/langua/issues"
+  },
+  "author": "Valerio Belli <belli.valerio@outlook.com>",
+  "license": "MIT",
+  "keywords": [
+    "i18n",
+    "tiny",
+    "dependency-free"
+  ],
+  "scripts": {
+    "build": "yarn clean && yarn build:bundle && yarn build:typings",
+    "build:bundle": "rollup -c rollup.config.js",
+    "build:typings": "tsc --project tsconfig.code.json --emitDeclarationOnly",
+    "clean": "rimraf .tsbuildinfo esm lib typings",
+    "lint": "eslint --format codeframe --ext tsx,ts src",
+    "size-limit": "size-limit",
+    "test": "vitest",
+    "typecheck": "tsc --project tsconfig.code.json --noEmit"
+  },
+  "devDependencies": {
+    "@rollup/plugin-alias": "3.1.9",
+    "@rollup/plugin-node-resolve": "13.3.0",
+    "@size-limit/preset-small-lib": "7.0.8",
+    "@swc/core": "1.2.220",
+    "c8": "7.12.0",
+    "eslint": "8.20.0",
+    "rimraf": "3.0.2",
+    "rollup": "2.77.2",
+    "rollup-plugin-swc3": "0.3.0",
+    "size-limit": "7.0.8",
+    "vitest": "0.19.1"
+  },
+  "packageManager": "yarn@3.2.1"
+}

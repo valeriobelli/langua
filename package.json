@@ -1,0 +1,41 @@
+{
+  "name": "@langua/root",
+  "private": true,
+  "description": "Internationalization toolbelt for every need.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/valeriobelli/langua"
+  },
+  "bugs": {
+    "url": "https://github.com/valeriobelli/langua/issues"
+  },
+  "workspaces": [
+    "packages/*"
+  ],
+  "author": "Valerio Belli <belli.valerio@outlook.com>",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.0.3",
+    "@commitlint/config-conventional": "^17.0.3",
+    "@nrwl/cli": "14.4.3",
+    "@nrwl/eslint-plugin-nx": "^14.4.3",
+    "@nrwl/nx-cloud": "^14.2.0",
+    "@nrwl/workspace": "14.4.3",
+    "@typescript-eslint/eslint-plugin": "^5.31.0",
+    "@typescript-eslint/parser": "^5.31.0",
+    "commitlint-config-yarn-scopes": "2.0.0",
+    "eslint": "^8.20.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-import-resolver-typescript": "^3.3.0",
+    "eslint-plugin-import": "^2.26.0",
+    "husky": "8.0.1",
+    "lint-staged": "13.0.3",
+    "nx": "14.4.3",
+    "prettier": "2.7.1",
+    "typescript": "4.7.4"
+  },
+  "packageManager": "yarn@3.2.1"
+}

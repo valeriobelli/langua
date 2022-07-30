@@ -1,0 +1,21 @@
+# Node
+node_modules
+
+# Project
+lib
+esm
+typings
+
+# Eslint
+.eslintcache
+
+# TypeScript
+.tsbuildinfo
+
+# Vitest
+coverage
+
+# Yarn
+.yarn/cache
+.yarn/install-state.gz
+yarn-error.log
