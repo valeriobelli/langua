@@ -1,0 +1,19 @@
+name: "CI workflow for @langua/core"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "packages/core/**"
+  pull_request:
+    branches:
+      - main
+    paths:
+      - "packages/core/**"
+
+jobs:
+  core:
+    uses: "./.github/workflows/_ci.yml"
+    with:
+      package_name: core
