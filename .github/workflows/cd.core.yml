@@ -1,0 +1,12 @@
+name: "CD workflow for @langua/core"
+
+on:
+  push:
+    tags:
+      - core/v*
+
+jobs:
+  ci:
+    uses: "./.github/workflows/_cd.yml"
+    with:
+      package_path: "packages/core"
