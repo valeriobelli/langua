@@ -13,7 +13,6 @@ const createConfig = ({ dir, format }) =>
       dir,
       exports: 'named',
       format,
-      sourcemap: true,
     },
     plugins: [
       alias({
@@ -25,7 +24,6 @@ const createConfig = ({ dir, format }) =>
         extensions: ['.ts'],
       }),
       swc({
-        sourceMaps: true,
         tsconfig: path.resolve(root, 'tsconfig.code.json'),
       }),
     ],
