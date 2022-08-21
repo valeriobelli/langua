@@ -1,16 +1,12 @@
-name: CI
+name: "Reusable CI workflow"
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "packages/core/**"
-  pull_request:
-    branches:
-      - main
-    paths:
-      - "packages/core/**"
+  workflow_call:
+    inputs:
+      package_path:
+        required: true
+        type: string
+        description: "The glob that identity the package for which the CI pipeline should run."
 
 jobs:
   setup:
@@ -21,6 +17,8 @@ jobs:
           - 14.x
           - 16.x
           - 18.x
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -44,6 +42,8 @@ jobs:
           - 14.x
           - 16.x
           - 18.x
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -59,7 +59,7 @@ jobs:
         run: yarn install
 
       - name: Execute
-        run: yarn turbo run build:bundle --filter="./packages/core/**"
+        run: yarn turbo run build:bundle --filter="./${{ inputs.package_path }}/**"
 
   build-typings:
     runs-on: ubuntu-latest
@@ -70,6 +70,8 @@ jobs:
           - 14.x
           - 16.x
           - 18.x
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -85,7 +87,7 @@ jobs:
         run: yarn install
 
       - name: Execute
-        run: yarn turbo run build:typings --filter="./packages/core/**"
+        run: yarn turbo run build:typings --filter="./${{ inputs.package_path }}/**"
 
   lint:
     runs-on: ubuntu-latest
@@ -96,6 +98,8 @@ jobs:
           - 14.x
           - 16.x
           - 18.x
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -111,7 +115,7 @@ jobs:
         run: yarn install
 
       - name: Execute
-        run: yarn turbo run lint --filter="./packages/core/**"
+        run: yarn turbo run lint --filter="./${{ inputs.package_path }}/**"
 
   typecheck:
     runs-on: ubuntu-latest
@@ -122,6 +126,8 @@ jobs:
           - 14.x
           - 16.x
           - 18.x
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -137,7 +143,7 @@ jobs:
         run: yarn install
 
       - name: Execute
-        run: yarn turbo run typecheck --filter="./packages/core/**"
+        run: yarn turbo run typecheck --filter="./${{ inputs.package_path }}/**"
 
   tests:
     runs-on: ubuntu-latest
@@ -148,6 +154,8 @@ jobs:
           - 14.x
           - 16.x
           - 18.x
+    env:
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
 
     steps:
       - name: Checkout repo
@@ -163,4 +171,4 @@ jobs:
         run: yarn install
 
       - name: Execute
-        run: yarn turbo run test --filter="./packages/core/**" -- --watch=false
+        run: yarn turbo run test --filter="./${{ inputs.package_path }}/**" -- --watch=false
