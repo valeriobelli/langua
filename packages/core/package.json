@@ -10,6 +10,10 @@
     "url": "https://github.com/valeriobelli/langua/issues"
   },
   "author": "Valerio Belli <belli.valerio@outlook.com>",
+  "files": [
+    "esm",
+    "lib"
+  ],
   "license": "MIT",
   "keywords": [
     "i18n",
