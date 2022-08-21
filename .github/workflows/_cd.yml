@@ -1,0 +1,71 @@
+name: "Reusable CD workflow"
+
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        description: "The package's name for which the CD pipeline should run."
+        required: true
+        type: string
+    secrets:
+      npm_secret_key:
+        description: "NPM secret key needed to publish the package on NPM."
+        required: true
+
+jobs:
+  CD:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+
+      - name: "Check version"
+        run: |
+          LOCAL_VERSION=$(cat packages/${{ inputs.package_name }}/package.json | jq '.version')
+          REMOTE_VERSION=$(yarn npm info @langua/${{ inputs.package_name }} --json | jq '.version')
+          TAG=${{github.ref_name}}
+          TAG_VERSION="\"${TAG##*@}\""
+
+          if [ $TAG_VERSION != $LOCAL_VERSION ]; then
+            echo "Tag version ${TAG_VERSION} mismatches with local version ${LOCAL_VERSION}.";
+
+            exit -1;
+          fi
+
+          if [ $LOCAL_VERSION = $REMOTE_VERSION ]; then
+            echo "Local version ${TAG_VERSION} mismatches with remote version ${LOCAL_VERSION}.";
+
+            exit -1;
+          fi
+            
+          exit 0;
+
+      - name: Setup
+        run: yarn install
+
+      - name: Build bundle
+        id: build_bundle
+        run: yarn turbo run build:bundle --filter="./packages/${{ inputs.package_name }}/**"
+
+      - name: Build tyings
+        id: build_typings
+        run: yarn turbo run build:typings --filter="./packages/${{ inputs.package_name }}/**"
+
+      - name: Publish
+        if: ${{ (steps.build_bundle.outcome == 'success') && (steps.build_typings.outcome == 'success') }}
+        run: |
+          yarn config set npmAuthToken $NPM_SECRET_KEY
+          yarn --cwd "./packages/${{ inputs.package_name }}" npm publish --access public
+        env:
+          NPM_SECRET_KEY: ${{ secrets.npm_secret_key }}

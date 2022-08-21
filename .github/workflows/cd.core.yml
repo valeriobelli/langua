@@ -1,0 +1,14 @@
+name: "CD workflow for @langua/core"
+
+on:
+  push:
+    tags:
+      - "@langua/core@*"
+
+jobs:
+  core:
+    uses: "./.github/workflows/_cd.yml"
+    with:
+      package_name: core
+    secrets:
+      npm_secret_key: "${{ secrets.NPM_SECRET_KEY }}"
