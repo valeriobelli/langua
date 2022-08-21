@@ -30,7 +30,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          cache: yarn
 
       - name: Setup
         run: yarn install
@@ -53,13 +53,39 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          cache: yarn
 
       - name: Setup
         run: yarn install
 
       - name: Execute
-        run: "yarn nx core:build"
+        run: yarn turbo run build:bundle --filter="./packages/core/**"
+
+  build-typings:
+    runs-on: ubuntu-latest
+    needs: ["setup"]
+    strategy:
+      matrix:
+        node-version:
+          - 14.x
+          - 16.x
+          - 18.x
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: yarn
+
+      - name: Setup
+        run: yarn install
+
+      - name: Execute
+        run: yarn turbo run build:typings --filter="./packages/core/**"
 
   lint:
     runs-on: ubuntu-latest
@@ -79,13 +105,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          cache: yarn
 
       - name: Setup
         run: yarn install
 
       - name: Execute
-        run: "yarn nx core:lint"
+        run: yarn turbo run lint --filter="./packages/core/**"
 
   typecheck:
     runs-on: ubuntu-latest
@@ -105,13 +131,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          cache: yarn
 
       - name: Setup
         run: yarn install
 
       - name: Execute
-        run: "yarn nx core:typecheck"
+        run: yarn turbo run typecheck --filter="./packages/core/**"
 
   tests:
     runs-on: ubuntu-latest
@@ -131,10 +157,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "yarn"
+          cache: yarn
 
       - name: Setup
         run: yarn install
 
       - name: Execute
-        run: "yarn nx core:test"
+        run: yarn turbo run test --filter="./packages/core/**" -- --watch=false

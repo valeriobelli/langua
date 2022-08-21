@@ -1,0 +1,30 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "globalDependencies": [".eslintrc.js", "prettier.config.js", "tsconfig.json"],
+  "pipeline": {
+    "build:bundle": {
+      "inputs": ["src/*.ts", "src/*.tsx", "src/**/*.ts", "src/**/*.tsx"],
+      "outputs": []
+
+    },
+    "build:typings": {
+      "inputs": ["src/*.ts", "src/*.tsx", "src/**/*.ts", "src/**/*.tsx"],
+      "outputs": []
+    },
+    "lint": {
+      "inputs": ["*.js", "*.ts", "src/**/*.ts", "src/**/*.tsx"],
+      "outputs": []
+    },
+    "test": {
+      "inputs": ["src/**/*.ts", "src/**/*.tsx"],
+      "outputs": []
+    },
+    "typecheck": {
+      "inputs": ["src/**/*.ts", "src/**/*.tsx"],
+      "outputs": []
+    }
+  },
+  "remoteCache": {
+    "signature": true
+  }
+}
