@@ -10,7 +10,7 @@ const config = {
     'footer-empty': [2, 'never'],
     'header-max-length': [2, 'always', 90],
     'type-empty': [2, 'never'],
-    'type-enum': [2, 'always', ['build', 'ci', 'docs', 'feat', 'fix', 'refactor']],
+    'type-enum': [2, 'always', ['build', 'ci', 'deps', 'docs', 'feat', 'fix', 'refactor']],
   },
 }
 
