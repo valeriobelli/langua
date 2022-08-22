@@ -3,7 +3,7 @@ name: "CD workflow for @langua/core"
 on:
   push:
     tags:
-      - core/v*
+      - @langua/core@*
 
 jobs:
   ci:

@@ -1,0 +1,12 @@
+name: "Changesets workflow for @langua/core"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  ci:
+    uses: "./.github/workflows/_changesets.yml"
+    with:
+      package_name: "core"
