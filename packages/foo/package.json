@@ -1,6 +1,6 @@
 {
   "name": "@langua/foo",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "The dependency-free framework-agnostic type-safe core package of Langua.",
   "repository": {
     "type": "git",
