@@ -15,7 +15,8 @@
   "author": "Valerio Belli <belli.valerio@outlook.com>",
   "license": "MIT",
   "scripts": {
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "version": "changeset version"
   },
   "devDependencies": {
     "@changesets/cli": "^2.24.3",
