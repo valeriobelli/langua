@@ -16,7 +16,7 @@ updates:
       interval: "weekly"
     versioning-strategy: "increase"
 
-  - package-ecosystem: "yarn"
+  - package-ecosystem: "npm"
     assignees:
       - "dependabot[bot]"
     commit-message:
