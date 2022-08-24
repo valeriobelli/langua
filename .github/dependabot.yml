@@ -14,19 +14,3 @@ updates:
       - "valeriobelli"
     schedule:
       interval: "weekly"
-
-  - package-ecosystem: "npm"
-    assignees:
-      - "dependabot[bot]"
-    commit-message:
-      prefix: "deps(root)"
-      include: scope
-    directory: "/"
-    labels:
-      - "dependencies"
-      - "automerge"
-    reviewers:
-      - "valeriobelli"
-    schedule:
-      interval: "weekly"
-    versioning-strategy: "increase-if-necessary"
