@@ -41,7 +41,7 @@
     "rollup": "2.77.2",
     "rollup-plugin-swc3": "0.3.0",
     "size-limit": "7.0.8",
-    "vitest": "0.19.1"
+    "vitest": "0.22.1"
   },
   "packageManager": "yarn@3.2.1"
 }
