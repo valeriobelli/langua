@@ -1,9 +1,11 @@
-name: "CD workflow for @langua/core"
+name: "core/CD"
 
 on:
   push:
-    tags:
-      - "@langua/core@*"
+    branches:
+      - main
+    paths:
+      - packages/core/**
 
 jobs:
   core:

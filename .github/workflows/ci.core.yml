@@ -1,4 +1,4 @@
-name: "CI workflow for @langua/core"
+name: "core/CI"
 
 on:
   push:

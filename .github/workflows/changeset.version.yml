@@ -11,20 +11,24 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - 18.x
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Setup Node.js 18.x
+      - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
-          node-version: 18.x
+          node-version: ${{ matrix.node-version }}
           cache: yarn
 
       - name: Install Dependencies
         run: yarn
 
-      - name: Create Release Pull Request
+      - name: Version packages
         uses: changesets/action@v1
         with:
           version: yarn run version

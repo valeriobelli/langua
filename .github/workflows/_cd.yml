@@ -1,5 +1,3 @@
-name: "Reusable CD workflow"
-
 on:
   workflow_call:
     inputs:
@@ -12,39 +10,36 @@ on:
         description: "NPM secret key needed to publish the package on NPM."
         required: true
 
+env:
+  NODE_VERSION: 18.x
+
 jobs:
   CD:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version:
-          - 18.x
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js ${NODE_VERSION}
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: ${NODE_VERSION}
           cache: yarn
 
-      - name: "Check version"
+      - name: "Package info"
+        id: package_info
         run: |
-          LOCAL_VERSION=$(cat packages/${{ inputs.package_name }}/package.json | jq '.version')
-          REMOTE_VERSION=$(yarn npm info @langua/${{ inputs.package_name }} --json | jq '.version')
-          TAG=${{github.ref_name}}
-          TAG_VERSION="\"${TAG##*@}\""
+          echo "::set-output name=name::$(cat packages/${{ inputs.package_name }}/package.json | jq '.name' | tr -d '"')"
+          echo "::set-output name=version::$(cat packages/${{ inputs.package_name }}/package.json | jq '.version' | tr -d '"')"
 
-          if [ $TAG_VERSION != $LOCAL_VERSION ]; then
-            echo "Tag version ${TAG_VERSION} mismatches with local version ${LOCAL_VERSION}.";
+      - name: "Check version"
+        id: check_version
+        run: |
+          REMOTE_VERSION=$(yarn npm info ${{ steps.package_info.outputs.name }} --json | jq '.version' | tr -d '"')
 
-            exit -1;
-          fi
-
-          if [ $LOCAL_VERSION = $REMOTE_VERSION ]; then
-            echo "Local version ${TAG_VERSION} mismatches with remote version ${LOCAL_VERSION}.";
+          if [ ${{ steps.package_info.outputs.version }} = $REMOTE_VERSION ]; then
+            echo "The local package ${{ steps.package_info.outputs.name }}@${{ steps.package_info.outputs.version }} is already on the registry!";
 
             exit -1;
           fi
@@ -58,7 +53,7 @@ jobs:
         id: build_bundle
         run: yarn turbo run build:bundle --filter="./packages/${{ inputs.package_name }}/**"
 
-      - name: Build tyings
+      - name: Build typings
         id: build_typings
         run: yarn turbo run build:typings --filter="./packages/${{ inputs.package_name }}/**"
 
@@ -69,3 +64,19 @@ jobs:
           yarn --cwd "./packages/${{ inputs.package_name }}" npm publish --access public
         env:
           NPM_SECRET_KEY: ${{ secrets.npm_secret_key }}
+
+      - name: "Read changelog"
+        id: read_changelog
+        run: |
+          CHANGELOG_ENTRY=$(yarn changesets-changelog-entry ./packages/${{ inputs.package_name }}/CHANGELOG.md ${{ steps.package_info.outputs.version }})
+          CHANGELOG_ENTRY="${CHANGELOG_ENTRY//'%'/'%25'}"
+          CHANGELOG_ENTRY="${CHANGELOG_ENTRY//$'\n'/'%0A'}"
+          CHANGELOG_ENTRY="${CHANGELOG_ENTRY//$'\r'/'%0D'}"
+
+          echo "::set-output name=changelog_entry::$CHANGELOG_ENTRY"
+
+      - name: "Create Release"
+        uses: ncipollo/release-action@v1
+        with:
+          body: ${{ steps.read_changelog.outputs.changelog_entry }}
+          tag: ${{ steps.package_info.outputs.name }}@${{ steps.package_info.outputs.version }}
