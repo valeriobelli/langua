@@ -23,11 +23,11 @@ const i18n = langua({
     it: {
         'hello.world': 'Ciao, mondo!',
     },
-})
+}, 'en')
 
 // Access to the translations
 console.log(i18n.translate({ id: 'hello.world' }))
-console.log(i18n.translate({ id: 'hello.world', values: { date: new Date().toJSON() } }))
+console.log(i18n.translate<{ date: string }>({ id: 'hello.world', values: { date: new Date().toJSON() } }))
 
 // Change the current locale
 const i18nIt = i18n.setLocale('it')

@@ -1,15 +1,6 @@
 import { interpolate } from './interpolate'
 import type { Flatten, GetAvailableLocales, LocalesTranslations } from './types'
 
-type TranslationOptions<DefinedTranslations extends Record<string, string>> =
-  | {
-      id: keyof DefinedTranslations
-    }
-  | {
-      id: keyof DefinedTranslations
-      values: Record<string, string>
-    }
-
 export interface Langua<Locale extends string | number | symbol, Translations extends LocalesTranslations> {
   addTranslations: <NewLocale extends string | number | symbol, LocaleTranslations extends Record<string, string>>(
     locale: NewLocale,
@@ -18,7 +9,10 @@ export interface Langua<Locale extends string | number | symbol, Translations ex
   setLocale: <NextLocale extends GetAvailableLocales<Translations>>(
     locale: NextLocale
   ) => Langua<NextLocale, Translations>
-  translate: (options: TranslationOptions<Translations[Locale]>) => string
+  translate: {
+    (args: { id: keyof Translations[Locale] }): string
+    <Values extends Record<string, string>>(args: { id: keyof Translations[Locale]; values: Values }): string
+  }
 }
 
 export const langua = <Translations extends LocalesTranslations, Locale extends GetAvailableLocales<Translations>>(
@@ -47,13 +41,13 @@ export const langua = <Translations extends LocalesTranslations, Locale extends 
   ): Langua<NextLocale, Translations> {
     return langua(translations, locale)
   },
-  translate(options) {
-    const translation = translations[initialLocale][options.id]
+  translate(args: { id: keyof Translations[Locale]; values?: Record<string, string> }) {
+    const translation = translations[initialLocale][args.id]
 
     if (!translation) {
-      return String(options.id)
+      return String(args.id)
     }
 
-    return interpolate({ translation, values: 'values' in options ? options.values : {} })
+    return interpolate({ translation, values: args.values || {} })
   },
 })
