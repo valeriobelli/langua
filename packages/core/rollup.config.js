@@ -10,8 +10,8 @@ const createConfig = ({ dir, format }) =>
   defineConfig({
     input: 'src/index.ts',
     output: {
-      dir,
       exports: 'named',
+      file: path.join(dir, `index.${format === 'esm' ? 'mjs' : 'cjs'}`),
       format,
     },
     plugins: [

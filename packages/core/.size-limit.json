@@ -3,24 +3,24 @@
     "path": "esm/index.js",
     "gzip": false,
     "name": "esm",
-    "limit": "398 B"
+    "limit": "386 B"
   },
   {
     "path": "esm/index.js",
     "gzip": true,
     "name": "esm - gzipped",
-    "limit": "222 B"
+    "limit": "215 B"
   },
   {
     "path": "lib/index.js",
     "gzip": false,
     "name": "cjs",
-    "limit": "538 B"
+    "limit": "526 B"
   },
   {
     "path": "lib/index.js",
     "gzip": true,
     "name": "cjs - gzipped",
-    "limit": "301 B"
+    "limit": "294 B"
   }
 ]

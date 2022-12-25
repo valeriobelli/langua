@@ -19,7 +19,7 @@ describe('langua', () => {
     const i18n = langua(translations, 'en')
 
     expect(i18n.translate({ id: 'foo' })).toBe('foo EN')
-    expect(i18n.translate({ id: 'fooWithValues', values: { value: 'Supah value' } })).toBe(
+    expect(i18n.translate<{ value: string }>({ id: 'fooWithValues', values: { value: 'Supah value' } })).toBe(
       'Hello, world! This is a Supah value!'
     )
   })
